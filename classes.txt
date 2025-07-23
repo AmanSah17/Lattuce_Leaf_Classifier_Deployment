@@ -1,0 +1,8 @@
+Bacterial (BACT)
+Downey Mildew on Lettuce (DML)
+Healthy (HLTY)
+Powdery Mildew on Lettuce (PML)
+Septorial Blight on Lettuce (SBL)
+Shephered Purse Weed (SPW)
+Viral (VIRL)
+Wilt and Leaf Blight on Lettuce (WLBL)
