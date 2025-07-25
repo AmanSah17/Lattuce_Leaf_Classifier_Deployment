@@ -8,3 +8,4 @@ opencv-python
 mahotas
 fastapi
 uvicorn
+joblib
