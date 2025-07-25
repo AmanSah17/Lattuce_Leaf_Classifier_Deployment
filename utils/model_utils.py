@@ -3,6 +3,7 @@
 import torch
 from torchvision import transforms
 from PIL import Image
+import cv2
 
 # TinyVGG class (copied here or imported from another file)
 import torch.nn as nn
@@ -53,3 +54,26 @@ def predict_image(model, image_tensor, class_names, device):
         pred_label = pred_label.item()
         pred_confidence = pred_confidence.item()
         return class_names[pred_label], pred_confidence
+    
+
+
+# === Feature Extraction for Classical ML ===
+def compute_brightness(img_path):
+    img = cv2.imread(img_path)
+    if img is None:
+        return 0
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    return np.mean(gray)
+
+def extract_texture(img_path):
+    img = cv2.imread(img_path)
+    if img is None:
+        return np.zeros(13)
+    gray = cv2.cvtColor(cv2.resize(img, (240, 240)), cv2.COLOR_BGR2GRAY)
+    return mahotas.features.haralick(gray).mean(axis=0)
+
+def extract_histogram(img_path):
+    img = cv2.imread(img_path)
+    gray = cv2.cvtColor(cv2.resize(img, (240, 240)), cv2.COLOR_BGR2GRAY)
+    hist = cv2.calcHist([gray], [0], None, [64], [0, 256])
+    return hist.flatten() / hist.sum()
