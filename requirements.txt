@@ -9,3 +9,4 @@ mahotas
 fastapi
 uvicorn
 joblib
+scikit-learn 
