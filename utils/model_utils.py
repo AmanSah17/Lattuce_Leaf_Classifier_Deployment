@@ -4,6 +4,8 @@ import torch
 from torchvision import transforms
 from PIL import Image
 import cv2
+import numpy as np
+import mahotas
 
 # TinyVGG class (copied here or imported from another file)
 import torch.nn as nn
