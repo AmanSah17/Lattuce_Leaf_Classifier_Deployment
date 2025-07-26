@@ -125,23 +125,7 @@ with st.container():
     """)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# === YouTube Video Section ===
-with st.container():
-    st.markdown("## 📺 Project Explanation Video")
-    st.markdown('<div class="youtube-container">', unsafe_allow_html=True)
-    
-    # YouTube embed with dummy link
-    youtube_embed = """
-    <iframe width="560" height="315" 
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-            title="Lettuce Leaf Classification Project" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen>
-    </iframe>
-    """
-    st.markdown(youtube_embed, unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+
 
 # === Device Setup ===
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -212,9 +196,15 @@ def predict_single_image(image, image_name):
         feature_vector = np.hstack([brightness, texture, histogram])
         feature_vector = scaler.transform([feature_vector])
         
-        prediction_ml = voting_model.predict(feature_vector)[0]
+        prediction_ml_id = voting_model.predict(feature_vector)[0]
         probas_ml = voting_model.predict_proba(feature_vector)[0]
         confidence_ml = np.max(probas_ml)
+        
+        # Map numeric ID to class name
+        if isinstance(prediction_ml_id, (int, np.integer)) and prediction_ml_id < len(class_names):
+            prediction_ml = class_names[prediction_ml_id]
+        else:
+            prediction_ml = str(prediction_ml_id)  # Fallback to string representation
         
         return {
             'image_name': image_name,
@@ -277,6 +267,24 @@ if uploaded_files:
                 st.markdown('</div>', unsafe_allow_html=True)
             
             st.markdown("---")
+
+# === YouTube Video Section ===
+with st.container():
+    st.markdown("## 📺 Project Explanation Video")
+    st.markdown('<div class="youtube-container">', unsafe_allow_html=True)
+    
+    # YouTube embed with dummy link
+    youtube_embed = """
+    <iframe width="560" height="315" 
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+            title="Lettuce Leaf Classification Project" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+    </iframe>
+    """
+    st.markdown(youtube_embed, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # === Contact Form Section ===
 with st.container():

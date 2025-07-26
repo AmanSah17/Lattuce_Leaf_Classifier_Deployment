@@ -108,6 +108,14 @@ with st.container():
     """)
     st.markdown('</div>', unsafe_allow_html=True)
 
+# === Load Class Names ===
+@st.cache_data
+def load_class_names():
+    with open("classes.txt", "r") as f:
+        return [line.strip() for line in f.readlines()]
+
+class_names = load_class_names()
+
 # === Load Models and Scalers ===
 @st.cache_resource
 def load_ml_models():
@@ -131,9 +139,15 @@ def predict_ml_image(image_path):
         feature_vector = scaler.transform([feature_vector])
         
         # Get prediction
-        prediction = voting_model.predict(feature_vector)[0]
+        prediction_id = voting_model.predict(feature_vector)[0]
         probas = voting_model.predict_proba(feature_vector)[0]
         confidence = np.max(probas)
+        
+        # Map numeric ID to class name
+        if isinstance(prediction_id, (int, np.integer)) and prediction_id < len(class_names):
+            prediction = class_names[prediction_id]
+        else:
+            prediction = str(prediction_id)  # Fallback to string representation
         
         return prediction, confidence, probas
     except Exception as e:
