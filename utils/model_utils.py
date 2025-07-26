@@ -10,6 +10,27 @@ import mahotas
 # TinyVGG class (copied here or imported from another file)
 import torch.nn as nn
 
+# Class name mapping for better user experience
+CLASS_DESCRIPTIONS = {
+    'BACT': 'Bacterial Diseases',
+    'DML': 'Downey Mildew on Lettuce',
+    'HLTY': 'Healthy Leaves',
+    'PML': 'Powdery Mildew on Lettuce',
+    'SBL': 'Septorial Blight on Lettuce',
+    'SPW': 'Shepherd Purse Weed',
+    'VIRL': 'Viral Diseases',
+    'WLBL': 'Wilt and Leaf Blight on Lettuce'
+}
+
+def get_class_description(class_code):
+    """Get full description for a class code"""
+    return CLASS_DESCRIPTIONS.get(class_code, class_code)
+
+def get_class_display_name(class_code):
+    """Get display name with code and description"""
+    description = get_class_description(class_code)
+    return f"{class_code} - {description}"
+
 class TinyVGG(nn.Module):
     def __init__(self, input_shape: int, hidden_units: int, output_shape: int) -> None:
         super().__init__()
